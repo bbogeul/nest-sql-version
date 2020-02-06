@@ -1,7 +1,7 @@
 import {
   registerDecorator,
   ValidationOptions,
-  ValidationArguments,
+  //   ValidationArguments,
 } from 'class-validator';
 
 export const IsPassword = (validationOptions?: ValidationOptions) => {
