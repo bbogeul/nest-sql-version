@@ -206,7 +206,6 @@ SelectQueryBuilder.prototype.AndWhereEqual = function<Entity>(
   alias: string,
   property: string,
   value: any,
-  excludedRequestDto: any,
 ): SelectQueryBuilder<Entity> {
   if (value !== undefined) {
     this.andWhere(
@@ -224,7 +223,6 @@ SelectQueryBuilder.prototype.AndWhereLike = function<Entity>(
   alias: string,
   property: string,
   value: string,
-  excludedRequestDto: any,
 ): SelectQueryBuilder<Entity> {
   if (value !== undefined) {
     this.andWhere(
@@ -242,7 +240,6 @@ SelectQueryBuilder.prototype.AndWhereIn = function<Entity>(
   alias: string,
   property: string,
   values: any[],
-  excludedRequestDto: any,
 ): SelectQueryBuilder<Entity> {
   if (values && values.length > 0) {
     this.andWhere(
