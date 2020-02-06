@@ -1,9 +1,16 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Put,
+  BadRequestException,
+} from '@nestjs/common';
 import { User } from './user.entity';
 import { UserInfo } from '../../common';
 import { BaseController } from '../../core';
 import { UserService } from './user.service';
-import { UserCreateDto } from './dto';
+import { UserCreateDto, UserUpdateDto } from './dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller()
@@ -30,5 +37,14 @@ export class UserController extends BaseController {
   @Get('/my-page')
   async findMe(@UserInfo() user: User): Promise<User> {
     return await this.userService.findOne(user.id);
+  }
+
+  @Put('/user')
+  async update(
+    @UserInfo() user: User,
+    @Body() userUpdateDto: UserUpdateDto,
+  ): Promise<User> {
+    if (!user) throw new BadRequestException();
+    return await this.userService.updateUser(user.id, userUpdateDto);
   }
 }

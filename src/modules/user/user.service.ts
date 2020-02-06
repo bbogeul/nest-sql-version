@@ -4,7 +4,7 @@ import { BaseService } from '../../core';
 import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';
 import { User } from './user.entity';
-import { AdminUserListDto, UserCreateDto } from './dto';
+import { AdminUserListDto, UserCreateDto, UserUpdateDto } from './dto';
 import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
@@ -61,6 +61,28 @@ export class UserService extends BaseService {
       let userHistory = new UserHistory(newUser);
       userHistory.userId = newUser.id;
       userHistory = await entityManager.save(userHistory);
+      return user;
+    });
+    return user;
+  }
+
+  /**
+   * update user and insert user history
+   * @param userId
+   * @param userUpdateDto
+   */
+  async updateUser(
+    userId: number,
+    userUpdateDto: UserUpdateDto,
+  ): Promise<User> {
+    const user = await this.entityManager.transaction(async entityManager => {
+      let user = await this.userRepo.findOne(userId);
+      user = await entityManager.save(user.set(userUpdateDto));
+
+      let userHistory = new UserHistory(user);
+      userHistory.userId = userId;
+      userHistory = await entityManager.save(userHistory);
+      await this.userHistoryRepo.save(userUpdateDto);
       return user;
     });
     return user;
