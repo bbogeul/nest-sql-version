@@ -22,6 +22,7 @@ declare const module: any;
 async function bootstrap() {
   if (env === 'development') {
     console.log('Running in development mode.');
+    console.log(process.env.MYSQL_PORT);
   }
   app = await NestFactory.create<NestExpressApplication>(AppModule, {
     // logger: true
@@ -84,59 +85,59 @@ async function bootstrap() {
   }
 }
 
-/**
- * Graceful shutdown
- */
-// Prevents the program from closing instantly
-process.stdin.resume();
+// /**
+//  * Graceful shutdown
+//  */
+// // Prevents the program from closing instantly
+// process.stdin.resume();
 
-async function shutdown() {
-  if (app) {
-    const conn = getConnection();
-    debug('database connected: %o', conn.isConnected);
-    if (conn.isConnected) {
-      await conn.close();
-      debug('database connection closed');
-      debug('database connected: %o', conn.isConnected);
-    }
-    await app.close();
-    app = null;
-    debug('app closed');
-    process.exit();
-  }
-}
+// async function shutdown() {
+//   if (app) {
+//     const conn = getConnection();
+//     debug('database connected: %o', conn.isConnected);
+//     if (conn.isConnected) {
+//       await conn.close();
+//       debug('database connection closed');
+//       debug('database connected: %o', conn.isConnected);
+//     }
+//     await app.close();
+//     app = null;
+//     debug('app closed');
+//     process.exit();
+//   }
+// }
 
-// catch app is closing
-process.on('exit', code => {
-  console.log(`About to exit with code: ${code}`);
-});
+// // catch app is closing
+// process.on('exit', code => {
+//   console.log(`About to exit with code: ${code}`);
+// });
 
-// catch ctrl+c event and exit normally
-process.on('SIGINT', () => {
-  console.log('SIGINT signal received.');
-  shutdown();
-});
-
-// catch console is closing on windows
-process.on('SIGHUP', () => {
-  console.log('Got SIGHUP signal.');
-  shutdown();
-});
-
-// catch "kill pid"
-process.on('SIGUSR1', () => {
-  console.log('Got SIGUSR1 signal.');
-  shutdown();
-});
-process.on('SIGUSR2', () => {
-  console.log('Got SIGUSR2 signal.');
-  shutdown();
-});
-
-// catch uncaught exceptions
-// process.on('uncaughtException', err => {
-//   console.error('uncaughtException', err);
+// // catch ctrl+c event and exit normally
+// process.on('SIGINT', () => {
+//   console.log('SIGINT signal received.');
 //   shutdown();
 // });
+
+// // catch console is closing on windows
+// process.on('SIGHUP', () => {
+//   console.log('Got SIGHUP signal.');
+//   shutdown();
+// });
+
+// // catch "kill pid"
+// process.on('SIGUSR1', () => {
+//   console.log('Got SIGUSR1 signal.');
+//   shutdown();
+// });
+// process.on('SIGUSR2', () => {
+//   console.log('Got SIGUSR2 signal.');
+//   shutdown();
+// });
+
+// // catch uncaught exceptions
+// // process.on('uncaughtException', err => {
+// //   console.error('uncaughtException', err);
+// //   shutdown();
+// // });
 
 bootstrap();

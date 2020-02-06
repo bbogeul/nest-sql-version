@@ -10,12 +10,12 @@ export class PaginatedResponse<T> {
 }
 
 export class PaginatedRequest {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Type(() => Number)
   @Min(0)
   @Expose()
   @Default(0)
-  skip: number;
+  skip?: number;
 
   @ApiPropertyOptional()
   @Type(() => Number)
