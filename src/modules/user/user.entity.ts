@@ -13,7 +13,7 @@ export class User extends BaseUser {
 
   @Column('json', {
     name: 'user_roles',
-    default: () => [USER_ROLE.USER_NOT_APPROVED],
+    default: () => [USER_ROLE.USER_APPROVED],
     nullable: false,
     comment: '유저 롤',
   })

@@ -36,18 +36,4 @@ export class UserHistory extends BaseEntity<UserHistory> {
     comment: '사용자 성',
   })
   lastName: string;
-
-  @Column('varchar', {
-    nullable: false,
-    length: 10,
-    name: 'calling_code',
-  })
-  callingCode: string;
-
-  @Column('varchar', {
-    nullable: false,
-    length: 50,
-    comment: '모바일 번호',
-  })
-  mobile: string;
 }

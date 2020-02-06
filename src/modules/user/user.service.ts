@@ -1,4 +1,6 @@
 import '../../core/typeorm/select-query-builder-declaration';
+import Debug from 'debug';
+import { basename } from 'path';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { BaseService } from '../../core';
 import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
@@ -8,6 +10,8 @@ import { AdminUserListDto, UserCreateDto, UserUpdateDto } from './dto';
 import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
+
+const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
 @Injectable()
 export class UserService extends BaseService {
@@ -52,15 +56,17 @@ export class UserService extends BaseService {
    */
   async create(userCreateDto: UserCreateDto): Promise<User> {
     const user = await this.entityManager.transaction(async entityManager => {
-      let newUser = new User(userCreateDto);
-      newUser.password = await this.passwordService.hashPassword(
+      let user = new User(userCreateDto);
+      user.password = await this.passwordService.hashPassword(
         userCreateDto.password,
       );
-      newUser.userRoles = [USER_ROLE.USER_APPROVED];
-      newUser = await entityManager.save(newUser);
-      let userHistory = new UserHistory(newUser);
-      userHistory.userId = newUser.id;
-      userHistory = await entityManager.save(userHistory);
+      user.userRoles = [USER_ROLE.USER_APPROVED];
+      console.log('123123123');
+      user = await entityManager.save(user);
+      let userHistory = new UserHistory(user);
+      console.log(userHistory);
+      userHistory.userId = user.id;
+      userHistory = await entityManager.save(userHistory.set(user));
       return user;
     });
     return user;
@@ -77,6 +83,7 @@ export class UserService extends BaseService {
   ): Promise<User> {
     const user = await this.entityManager.transaction(async entityManager => {
       let user = await this.userRepo.findOne(userId);
+      console.log(user);
       user = await entityManager.save(user.set(userUpdateDto));
 
       let userHistory = new UserHistory(user);
