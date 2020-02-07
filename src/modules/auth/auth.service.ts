@@ -43,6 +43,8 @@ export class AuthService extends BaseService {
     if (!passwordValid) {
       throw new BadRequestException('Password does not match.');
     }
+    // increase sign in count and last login
+    await this.userRepo.update(user.id, { signinCount: user.signinCount + 1 });
     return this.sign(user);
   }
 

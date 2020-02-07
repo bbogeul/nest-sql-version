@@ -6,8 +6,9 @@ import { AdminUserController } from './admin-user.controller';
 import { UserService } from './user.service';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
+import { UserSigninHistory } from './user-signin-history.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserHistory])],
+  imports: [TypeOrmModule.forFeature([User, UserHistory, UserSigninHistory])],
   controllers: [UserController, AdminUserController],
   providers: [UserService, PasswordService],
 })

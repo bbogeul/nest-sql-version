@@ -1,7 +1,7 @@
 import { BaseEntity } from '../../core';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('user_history')
+@Entity('user_update_history')
 export class UserHistory extends BaseEntity<UserHistory> {
   constructor(partial?: any) {
     super(partial);

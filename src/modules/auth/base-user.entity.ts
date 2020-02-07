@@ -62,13 +62,6 @@ export abstract class BaseUser extends BaseEntity<BaseUser> {
   signinCount: number;
 
   @Column('timestamp', {
-    name: 'signin_last_time',
-    nullable: true,
-    comment: '최종로그인일시',
-  })
-  signinLastTime: Date;
-
-  @Column('timestamp', {
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     comment: '등록일시',

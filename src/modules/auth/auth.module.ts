@@ -8,12 +8,13 @@ import { AuthService } from './auth.service';
 import { PasswordService } from './password.service';
 import { User } from '../user/user.entity';
 import { UserAuthController } from './user-auth.controller';
+import { UserSigninHistory } from '../user/user-signin-history.entity';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({ useClass: JwtConfigService }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, UserSigninHistory]),
   ],
   providers: [AuthService, PasswordService, JwtStrategy],
   controllers: [UserAuthController],

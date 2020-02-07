@@ -1,6 +1,6 @@
-import { Controller, Get, Query, Param } from '@nestjs/common';
-import { BaseController } from '../../core';
-// import { User, CONST_ADMIN_ROLE } from '../../common';
+import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
+import { BaseController, AuthRolesGuard } from '../../core';
+import { UserInfo, CONST_ADMIN_ROLE } from '../../common';
 import { PaginatedRequest, PaginatedResponse } from '../../common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminUserListDto } from './dto';
@@ -11,7 +11,7 @@ import { User } from './user.entity';
 @ApiTags('User', 'ADMIN')
 @ApiBearerAuth()
 // for testing
-// @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
+@UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
 export class AdminUserController extends BaseController {
   constructor(private readonly userService: UserService) {
     super();
