@@ -4,4 +4,4 @@ export * from './base.service';
 export * from './base.entity';
 export * from './interceptors';
 export * from './typeorm';
-// export * from './guards';
+export * from './guards';
