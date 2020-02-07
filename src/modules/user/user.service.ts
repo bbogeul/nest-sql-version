@@ -11,6 +11,7 @@ import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
 import { UserSigninHistory } from './user-signin-history.entity';
+
 const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
 @Injectable()
@@ -104,13 +105,13 @@ export class UserService extends BaseService {
   ): Promise<User> {
     const user = await this.entityManager.transaction(async entityManager => {
       let user = await this.userRepo.findOne(userId);
-      console.log(user);
       user = await entityManager.save(user.set(userUpdateDto));
 
       let userHistory = new UserHistory(user);
+
       userHistory.userId = userId;
+      console.log(userHistory);
       userHistory = await entityManager.save(userHistory);
-      await this.userHistoryRepo.save(userUpdateDto);
       return user;
     });
     return user;

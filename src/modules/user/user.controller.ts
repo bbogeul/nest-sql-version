@@ -42,11 +42,18 @@ export class UserController extends BaseController {
     return await this.userService.findOne(user.id);
   }
 
+  /**
+   * update user information
+   * @param user
+   * @param userUpdateDto
+   */
   @Put('/user')
+  @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
   async update(
     @UserInfo() user: User,
     @Body() userUpdateDto: UserUpdateDto,
   ): Promise<User> {
+    console.log(user);
     if (!user) throw new BadRequestException();
     return await this.userService.updateUser(user.id, userUpdateDto);
   }

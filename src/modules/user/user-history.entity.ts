@@ -1,5 +1,6 @@
 import { BaseEntity } from '../../core';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { USER_ROLE } from 'src/shared';
 
 @Entity('user_update_history')
 export class UserHistory extends BaseEntity<UserHistory> {
@@ -36,4 +37,11 @@ export class UserHistory extends BaseEntity<UserHistory> {
     comment: '사용자 성',
   })
   lastName: string;
+
+  @Column('json', {
+    name: 'user_roles',
+    nullable: false,
+    comment: '유저 롤',
+  })
+  userRoles: USER_ROLE[];
 }

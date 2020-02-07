@@ -14,5 +14,6 @@ export class UserUpdateDto extends BaseDto<UserUpdateDto> {
   @Expose()
   lastName: string;
 
+  // find user
   userId: number;
 }
