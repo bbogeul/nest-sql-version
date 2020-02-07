@@ -45,7 +45,6 @@ export class AuthRolesGuard extends AuthGuard('jwt') {
         throw new ForbiddenException();
       }
     }
-
     return user;
   }
 }
