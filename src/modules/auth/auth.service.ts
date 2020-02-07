@@ -43,7 +43,7 @@ export class AuthService extends BaseService {
     if (!passwordValid) {
       throw new BadRequestException('Password does not match.');
     }
-    return this.sign(user, { userRole: user.userRoles });
+    return this.sign(user);
   }
 
   /**
@@ -60,7 +60,7 @@ export class AuthService extends BaseService {
    * @param extend
    * @param rememberMe
    */
-  async sign(user: User, extend: any, rememberMe?: boolean) {
+  async sign(user: User, extend?: any, rememberMe?: boolean) {
     const options = rememberMe
       ? { expiresIn: process.env.JWT_REMEMBER_EXPIRES_IN }
       : {};
