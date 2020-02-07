@@ -1,11 +1,9 @@
-import Debug from 'debug';
-import { basename } from 'path';
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 // for webpack:hmr
 import { getMetadataArgsStorage } from 'typeorm';
 
-const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
+// const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {

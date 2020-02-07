@@ -10,8 +10,7 @@ import { AdminUserListDto, UserCreateDto, UserUpdateDto } from './dto';
 import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
-import e = require('express');
-
+import { UserSigninHistory } from './user-signin-history.entity';
 const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
 @Injectable()
@@ -21,6 +20,8 @@ export class UserService extends BaseService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(UserHistory)
     private readonly userHistoryRepo: Repository<UserHistory>,
+    @InjectRepository(UserSigninHistory)
+    private readonly userSigninHistoryRepo: Repository<UserSigninHistory>,
     private readonly passwordService: PasswordService,
   ) {
     super();
@@ -38,6 +39,26 @@ export class UserService extends BaseService {
     const qb = this.userRepo
       .createQueryBuilder()
       .WhereAndOrder(adminUserListDto)
+      .Paginate(pagination);
+    const [items, totalCount] = await qb.getManyAndCount();
+    return { items, totalCount };
+  }
+
+  /**
+   * user's login history ~~~~
+   * @param userId
+   * @param pagination
+   */
+  async findSigninHistory(
+    userId: number,
+    pagination?: PaginatedRequest,
+  ): Promise<PaginatedResponse<UserSigninHistory>> {
+    // DTO로 빼야하나??
+    // SORTING BY ID
+    const where = { userId: userId };
+    const qb = this.userSigninHistoryRepo
+      .createQueryBuilder()
+      .WhereAndOrder(where)
       .Paginate(pagination);
     const [items, totalCount] = await qb.getManyAndCount();
     return { items, totalCount };

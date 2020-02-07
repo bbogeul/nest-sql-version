@@ -6,12 +6,13 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminUserListDto } from './dto';
 import { UserService } from './user.service';
 import { User } from './user.entity';
+import { UserSigninHistory } from './user-signin-history.entity';
 
 @Controller()
 @ApiTags('User', 'ADMIN')
 @ApiBearerAuth()
 // for testing
-@UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
+// @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
 export class AdminUserController extends BaseController {
   constructor(private readonly userService: UserService) {
     super();
@@ -37,5 +38,18 @@ export class AdminUserController extends BaseController {
   @Get('/admin/user/:id([0-9]+)')
   async findOne(@Param('id') userId: number): Promise<User> {
     return await this.userService.findOne(userId);
+  }
+
+  /**
+   * get a user's signin log
+   * @param userId
+   * @param pagination
+   */
+  @Get('/admin/user/:id([0-9]+)/signin-history')
+  async findSigninHistory(
+    @Param('id') userId: number,
+    @Query() pagination: PaginatedRequest,
+  ): Promise<PaginatedResponse<UserSigninHistory>> {
+    return await this.userService.findSigninHistory(userId, pagination);
   }
 }
