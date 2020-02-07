@@ -10,6 +10,7 @@ import { AdminUserListDto, UserCreateDto, UserUpdateDto } from './dto';
 import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
+import e = require('express');
 
 const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
@@ -55,16 +56,15 @@ export class UserService extends BaseService {
    * @param userCreateDto
    */
   async create(userCreateDto: UserCreateDto): Promise<User> {
+    await this.__checkUserEmail(userCreateDto.email);
     const user = await this.entityManager.transaction(async entityManager => {
       let user = new User(userCreateDto);
       user.password = await this.passwordService.hashPassword(
         userCreateDto.password,
       );
       user.userRoles = [USER_ROLE.USER_APPROVED];
-      console.log('123123123');
       user = await entityManager.save(user);
       let userHistory = new UserHistory(user);
-      console.log(userHistory);
       userHistory.userId = user.id;
       userHistory = await entityManager.save(userHistory.set(user));
       return user;
@@ -93,5 +93,18 @@ export class UserService extends BaseService {
       return user;
     });
     return user;
+  }
+
+  /**
+   * check user by email
+   * @param email
+   */
+  private async __checkUserEmail(email: string) {
+    const findUser = await this.userRepo.findOne({ email: email });
+    if (findUser) {
+      throw new BadRequestException('User not found');
+    } else {
+      return true;
+    }
   }
 }

@@ -15,5 +15,5 @@ export class AdminUserListDto extends BaseDto<AdminUserListDto> {
   @Default(ORDER_BY_VALUE.DESC)
   @IsEnum(ORDER_BY_VALUE)
   @Expose()
-  id?: ORDER_BY_VALUE;
+  orderById?: ORDER_BY_VALUE;
 }

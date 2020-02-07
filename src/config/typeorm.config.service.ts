@@ -11,7 +11,7 @@ const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
-      type: 'mariadb' as 'mariadb',
+      type: 'mysql',
       host: process.env.MYSQL_HOST,
       port: Number(process.env.MYSQL_PORT),
       username: process.env.MYSQL_USER,
