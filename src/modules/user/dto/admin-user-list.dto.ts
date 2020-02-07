@@ -11,6 +11,16 @@ export class AdminUserListDto extends BaseDto<AdminUserListDto> {
   @Expose()
   email?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Expose()
+  firstName?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Expose()
+  lastName?: string;
+
   @ApiPropertyOptional({ enum: ORDER_BY_VALUE })
   @Default(ORDER_BY_VALUE.DESC)
   @IsEnum(ORDER_BY_VALUE)
