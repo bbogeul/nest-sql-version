@@ -3,7 +3,7 @@ import { Entity, Column } from 'typeorm';
 import { BaseUser } from '../auth/base-user.entity';
 import { USER_ROLE } from '../../common';
 import { UserType } from '../auth/types/role.type';
-import { BUYER_STATUS } from '../../shared';
+// import { USER_STATUS } from '../../shared';
 
 @Entity('user')
 export class User extends BaseUser {

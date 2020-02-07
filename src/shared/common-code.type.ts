@@ -115,7 +115,7 @@ export enum USER_ROLE {
 }
 export const CONST_USER_ROLE = Object.values(USER_ROLE);
 
-export enum BUYER_STATUS {
+export enum USER_STATUS {
   'APPROVAL' = 'APPROVAL',
   'DELETED' = 'DELETED',
   'DENIED' = 'DENIED',
@@ -123,7 +123,7 @@ export enum BUYER_STATUS {
   'REREQUEST' = 'REREQUEST',
   'WAITING' = 'WAITING',
 }
-export const CONST_BUYER_STATUS = Object.values(BUYER_STATUS);
+export const CONST_USER_STATUS = Object.values(USER_STATUS);
 
 export enum CAPACITY_UNIT_TYPE {
   'G' = 'G',
