@@ -13,7 +13,7 @@ import { UserHistory } from './user-history.entity';
 import { UserSigninHistory } from './user-signin-history.entity';
 import { UserWithdrawHistory } from './user-withdraw-history.entity';
 
-const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
+// const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
 @Injectable()
 export class UserService extends BaseService {
@@ -129,9 +129,11 @@ export class UserService extends BaseService {
       userWithdraw.userId = findUser.id;
       userWithdraw.email = findUser.email;
       userWithdraw = await entityManager.save(userWithdraw);
-      // delete the user
+      console.log(userWithdraw);
+      // delete the user and user history
+      await this.userHistoryRepo.delete({ userId: userId });
       await this.userRepo.delete(userId);
-      return user;
+      return findUser;
     });
     return user;
   }

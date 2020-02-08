@@ -9,7 +9,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { User } from './user.entity';
-import { UserInfo, USER_ROLE, CONST_USER_ROLE } from '../../common';
+import { UserInfo, USER_ROLE } from '../../common';
 import { BaseController } from '../../core';
 import { UserService } from './user.service';
 import { UserCreateDto, UserUpdateDto } from './dto';
@@ -66,6 +66,7 @@ export class UserController extends BaseController {
   @Delete('/user')
   @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
   async delete(@UserInfo() user: User): Promise<User> {
+    console.log(user);
     return await this.userService.delete(user.id);
   }
 }
