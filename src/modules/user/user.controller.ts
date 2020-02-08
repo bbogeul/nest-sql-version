@@ -6,6 +6,7 @@ import {
   Put,
   BadRequestException,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserInfo, USER_ROLE, CONST_USER_ROLE } from '../../common';
@@ -56,5 +57,15 @@ export class UserController extends BaseController {
     console.log(user);
     if (!user) throw new BadRequestException();
     return await this.userService.updateUser(user.id, userUpdateDto);
+  }
+
+  /**
+   * 회원 탈퇴
+   * @param user
+   */
+  @Delete('/user')
+  @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
+  async delete(@UserInfo() user: User): Promise<User> {
+    return await this.userService.delete(user.id);
   }
 }

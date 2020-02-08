@@ -11,6 +11,7 @@ import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
 import { UserSigninHistory } from './user-signin-history.entity';
+import { UserWithdrawHistory } from './user-withdraw-history.entity';
 
 const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
@@ -112,6 +113,24 @@ export class UserService extends BaseService {
       userHistory.userId = userId;
       console.log(userHistory);
       userHistory = await entityManager.save(userHistory);
+      return user;
+    });
+    return user;
+  }
+
+  /**
+   * 회원 탈퇴
+   * @param userId
+   */
+  async delete(userId: number): Promise<User> {
+    const user = await this.entityManager.transaction(async entityManager => {
+      const findUser = await this.userRepo.findOne(userId);
+      let userWithdraw = new UserWithdrawHistory();
+      userWithdraw.userId = findUser.id;
+      userWithdraw.email = findUser.email;
+      userWithdraw = await entityManager.save(userWithdraw);
+      // delete the user
+      await this.userRepo.delete(userId);
       return user;
     });
     return user;
