@@ -66,7 +66,6 @@ export class UserController extends BaseController {
   @Delete('/user')
   @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
   async delete(@UserInfo() user: User): Promise<User> {
-    console.log(user);
     return await this.userService.delete(user.id);
   }
 
