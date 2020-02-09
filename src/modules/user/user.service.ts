@@ -138,6 +138,7 @@ export class UserService extends BaseService {
       // delete the user and user history
       await this.userHistoryRepo.delete({ userId: userId });
       await this.userRepo.delete(userId);
+      await this.userSigninHistoryRepo.delete(userId);
       return findUser;
     });
     return user;
