@@ -54,8 +54,6 @@ export class UserController extends BaseController {
     @UserInfo() user: User,
     @Body() userUpdateDto: UserUpdateDto,
   ): Promise<User> {
-    console.log(user);
-    if (!user) throw new BadRequestException();
     return await this.userService.updateUser(user.id, userUpdateDto);
   }
 

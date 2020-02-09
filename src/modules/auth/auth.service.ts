@@ -14,6 +14,7 @@ import { UserType } from './types/role.type';
 import { ADMIN_STATUS, USER_STATUS, USER_ROLE } from '../../shared';
 import { SigninDto } from './dto';
 import { UserSigninHistory } from '../user/user-signin-history.entity';
+import { Admin } from '../admin/admin.entity';
 
 @Injectable()
 export class AuthService extends BaseService {
@@ -24,6 +25,7 @@ export class AuthService extends BaseService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(UserSigninHistory)
     private readonly: Repository<UserSigninHistory>,
+    @InjectRepository(Admin) private readonly adminRepo: Repository<Admin>,
   ) {
     super();
   }
@@ -70,12 +72,20 @@ export class AuthService extends BaseService {
   }
 
   /**
+   * validate buyer by id
+   * @param userId
+   */
+  async validateAdminById(userId: number): Promise<User> {
+    return await this.adminRepo.findOne(userId);
+  }
+
+  /**
    * sign to jwt payload
    * @param user
    * @param extend
    * @param rememberMe
    */
-  async sign(user: User, extend?: any, rememberMe?: boolean) {
+  async sign(user: Admin | User, extend?: any, rememberMe?: boolean) {
     const options = rememberMe
       ? { expiresIn: process.env.JWT_REMEMBER_EXPIRES_IN }
       : {};
