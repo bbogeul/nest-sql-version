@@ -6,7 +6,12 @@ import { BaseService } from '../../core';
 import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';
 import { User } from './user.entity';
-import { AdminUserListDto, UserCreateDto, UserUpdateDto } from './dto';
+import {
+  AdminUserListDto,
+  UserCreateDto,
+  UserUpdateDto,
+  UserResetPasswordDto,
+} from './dto';
 import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
@@ -139,13 +144,42 @@ export class UserService extends BaseService {
   }
 
   /**
+   * user reset password
+   * this one is for someone who is already logged in.
+   * @param userId
+   * @param userResetPasswordDto
+   */
+  async resetPassword(
+    userId: number,
+    userResetPasswordDto: UserResetPasswordDto,
+  ): Promise<boolean> {
+    try {
+      const findUser = await this.userRepo.findOne(userId);
+      if (!findUser) throw new BadRequestException('User not found!');
+      const password = (userResetPasswordDto.password = await this.passwordService.hashPassword(
+        userResetPasswordDto.password,
+      ));
+      await this.userRepo.update(userId, {
+        password: password,
+        passwordUpdated: new Date(),
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  /**
    * check user by email
    * @param email
    */
   private async __checkUserEmail(email: string) {
     const findUser = await this.userRepo.findOne({ email: email });
     if (findUser) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException(
+        'This email has signed up already. Please login.',
+      );
     } else {
       return true;
     }

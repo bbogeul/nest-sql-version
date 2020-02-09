@@ -12,7 +12,7 @@ import { User } from './user.entity';
 import { UserInfo, USER_ROLE } from '../../common';
 import { BaseController } from '../../core';
 import { UserService } from './user.service';
-import { UserCreateDto, UserUpdateDto } from './dto';
+import { UserCreateDto, UserUpdateDto, UserResetPasswordDto } from './dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthRolesGuard } from '../../core';
 
@@ -68,5 +68,24 @@ export class UserController extends BaseController {
   async delete(@UserInfo() user: User): Promise<User> {
     console.log(user);
     return await this.userService.delete(user.id);
+  }
+
+  /**
+   * reset user password ~~~~
+   * @param user
+   * @param userResetPasswordDto
+   */
+  @Post('/user/reset-password')
+  @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
+  async resetPassword(
+    @UserInfo() user: User,
+    @Body() userResetPasswordDto: UserResetPasswordDto,
+  ) {
+    return {
+      isResetted: await this.userService.resetPassword(
+        user.id,
+        userResetPasswordDto,
+      ),
+    };
   }
 }
