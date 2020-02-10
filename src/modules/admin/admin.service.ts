@@ -6,12 +6,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class AdminService extends BaseService {
+export class AdminService {
   constructor(
     @InjectRepository(Admin) private readonly adminRepo: Repository<Admin>,
-  ) {
-    super();
-  }
+  ) {}
 
   /**
    * create new admin
@@ -19,6 +17,14 @@ export class AdminService extends BaseService {
    */
   async create(adminCreateDto: AdminCreateDto): Promise<Admin> {
     return await this.adminRepo.save(adminCreateDto);
+  }
+
+  /**
+   * 관라지 디테일
+   * @param adminId
+   */
+  async findOne(adminId: number): Promise<Admin> {
+    return await this.adminRepo.findOne(adminId);
   }
 
   /**

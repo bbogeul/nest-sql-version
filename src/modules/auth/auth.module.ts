@@ -10,6 +10,7 @@ import { User } from '../user/user.entity';
 import { UserAuthController } from './user-auth.controller';
 import { UserSigninHistory } from '../user/user-signin-history.entity';
 import { Admin } from '../admin/admin.entity';
+import { AdminAuthController } from './admin-auth.controller';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { Admin } from '../admin/admin.entity';
     TypeOrmModule.forFeature([User, UserSigninHistory, Admin]),
   ],
   providers: [AuthService, PasswordService, JwtStrategy],
-  controllers: [UserAuthController],
+  controllers: [UserAuthController, AdminAuthController],
 })
 export class AuthModule {}

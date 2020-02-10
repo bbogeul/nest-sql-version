@@ -63,6 +63,19 @@ export class AuthService extends BaseService {
     return this.sign(user);
   }
 
+  async signinAdmin(signinDto: SigninDto): Promise<string> {
+    const admin = await this.adminRepo.findOne({ email: signinDto.email });
+    if (!admin) throw new BadRequestException('Admin not found');
+    const passwordValid = await this.passwordService.validatePassword(
+      signinDto.password,
+      admin.password,
+    );
+    if (!passwordValid) {
+      throw new BadRequestException('Password does not match.');
+    }
+    return this.sign(admin);
+  }
+
   /**
    * validate buyer by id
    * @param userId
@@ -75,7 +88,7 @@ export class AuthService extends BaseService {
    * validate buyer by id
    * @param userId
    */
-  async validateAdminById(userId: number): Promise<User> {
+  async validateAdminById(userId: number): Promise<Admin> {
     return await this.adminRepo.findOne(userId);
   }
 
