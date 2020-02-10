@@ -63,6 +63,10 @@ export class AuthService extends BaseService {
     return this.sign(user);
   }
 
+  /**
+   * login admin
+   * @param signinDto
+   */
   async signinAdmin(signinDto: SigninDto): Promise<string> {
     const admin = await this.adminRepo.findOne({ email: signinDto.email });
     if (!admin) throw new BadRequestException('Admin not found');
@@ -73,6 +77,11 @@ export class AuthService extends BaseService {
     if (!passwordValid) {
       throw new BadRequestException('Password does not match.');
     }
+    await this.entityManager.transaction(async entityManager => {
+      const newCount = admin.signinCount + 1;
+      admin.signinCount = newCount;
+      await entityManager.save(admin);
+    });
     return this.sign(admin);
   }
 
