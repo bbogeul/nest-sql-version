@@ -4,11 +4,13 @@ import { BaseService } from '../../core';
 import { AdminCreateDto, AdminUpdateDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PasswordService } from '../auth/password.service';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(Admin) private readonly adminRepo: Repository<Admin>,
+    private readonly passwordService: PasswordService,
   ) {}
 
   /**
@@ -16,6 +18,9 @@ export class AdminService {
    * @param adminCreateDto
    */
   async create(adminCreateDto: AdminCreateDto): Promise<Admin> {
+    adminCreateDto.password = await this.passwordService.hashPassword(
+      adminCreateDto.password,
+    );
     return await this.adminRepo.save(adminCreateDto);
   }
 
