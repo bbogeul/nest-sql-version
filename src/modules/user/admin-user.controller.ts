@@ -1,4 +1,11 @@
-import { Controller, Get, Query, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  UseGuards,
+  Delete,
+} from '@nestjs/common';
 import { BaseController, AuthRolesGuard } from '../../core';
 import { UserInfo, CONST_ADMIN_ROLE } from '../../common';
 import { PaginatedRequest, PaginatedResponse } from '../../common';
@@ -51,5 +58,14 @@ export class AdminUserController extends BaseController {
     @Query() pagination: PaginatedRequest,
   ): Promise<PaginatedResponse<UserSigninHistory>> {
     return await this.userService.findSigninHistory(userId, pagination);
+  }
+
+  /**
+   * 관리자가 회원 강제 삭제
+   * @param userId
+   */
+  @Delete('/admin/user/:id([0-9]+)')
+  async deleteOne(@Param() userId: number): Promise<User> {
+    return await this.userService.delete(userId);
   }
 }
