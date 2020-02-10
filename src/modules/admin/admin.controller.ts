@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  UseGuards,
+  Delete,
+} from '@nestjs/common';
 import { BaseController, AuthRolesGuard } from 'src/core';
 import { AdminCreateDto, AdminResetPasswordDto } from './dto';
 import { AdminService } from './admin.service';
@@ -60,5 +68,25 @@ export class AdminController extends BaseController {
         adminResetPasswordDto,
       ),
     };
+  }
+
+  /**
+   * 특정한 관리자 삭제
+   * @param adminId
+   */
+  @Delete('/admin/:id([0-9]+)')
+  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
+  async deleteOne(@Param(':id') adminId: number) {
+    return { isDeleted: await this.adminService.delete(adminId) };
+  }
+
+  /**
+   * 본인 삭제
+   * @param admin
+   */
+  @Delete('/admin/me')
+  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
+  async delete(@UserInfo() admin: Admin) {
+    return { isDeleted: await this.adminService.delete(admin.id) };
   }
 }

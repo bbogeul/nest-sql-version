@@ -66,4 +66,13 @@ export class AdminService {
     });
     return true;
   }
+
+  /**
+   * delete admin
+   * @param adminId
+   */
+  async delete(adminId: number): Promise<boolean> {
+    await this.adminRepo.delete(adminId);
+    return true;
+  }
 }
