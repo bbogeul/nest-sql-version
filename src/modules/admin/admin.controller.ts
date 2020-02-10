@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
 import { BaseController, AuthRolesGuard } from 'src/core';
-import { AdminCreateDto } from './dto';
+import { AdminCreateDto, AdminResetPasswordDto } from './dto';
 import { AdminService } from './admin.service';
 import { UserInfo, ADMIN_ROLE, CONST_ADMIN_ROLE } from 'src/common';
 import { Admin } from './admin.entity';
@@ -41,5 +41,24 @@ export class AdminController extends BaseController {
   @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
   async findOne(@Param(':id') adminId: number): Promise<Admin> {
     return await this.adminService.findOne(adminId);
+  }
+
+  /**
+   * Reset user password
+   * @param admin
+   * @param adminResetPasswordDto
+   */
+  @Post('/admin/reset-password')
+  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
+  async resetPassword(
+    @UserInfo() admin: Admin,
+    @Body() adminResetPasswordDto: AdminResetPasswordDto,
+  ) {
+    return {
+      isResetted: await this.adminService.resetPassword(
+        admin.id,
+        adminResetPasswordDto,
+      ),
+    };
   }
 }

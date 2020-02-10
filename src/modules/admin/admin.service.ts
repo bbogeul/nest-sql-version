@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Admin } from './admin.entity';
 import { BaseService } from '../../core';
-import { AdminCreateDto, AdminUpdateDto } from './dto';
+import { AdminCreateDto, AdminUpdateDto, AdminResetPasswordDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PasswordService } from '../auth/password.service';
+import { ADMIN_ROLE } from 'src/shared';
 
 @Injectable()
 export class AdminService {
@@ -21,7 +22,9 @@ export class AdminService {
     adminCreateDto.password = await this.passwordService.hashPassword(
       adminCreateDto.password,
     );
-    return await this.adminRepo.save(adminCreateDto);
+    const newAdmin = new Admin(adminCreateDto);
+    newAdmin.adminRoles = [ADMIN_ROLE.ADMIN_SUPER];
+    return await this.adminRepo.save(newAdmin);
   }
 
   /**
@@ -43,5 +46,24 @@ export class AdminService {
   ): Promise<Admin> {
     await this.adminRepo.update(adminId, adminUpdateDto);
     return await this.adminRepo.findOne(adminId);
+  }
+
+  /**
+   * reset password for admin
+   * @param adminId
+   * @param resetPasswordDto
+   */
+  async resetPassword(
+    adminId: number,
+    resetPasswordDto: AdminResetPasswordDto,
+  ): Promise<boolean> {
+    const newPassword = await this.passwordService.hashPassword(
+      resetPasswordDto.password,
+    );
+    await this.adminRepo.update(adminId, {
+      password: newPassword,
+      passwordUpdated: new Date(),
+    });
+    return true;
   }
 }
