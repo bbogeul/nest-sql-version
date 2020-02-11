@@ -23,6 +23,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (payload.userType === UserType.USER) {
       user = await this.authService.validateUserById(payload.userId);
     }
+    if (payload.userType === UserType.ADMIN) {
+      user = await this.authService.validateAdminById(payload.userId);
+    }
     if (!user) {
       throw new UnauthorizedException();
     }

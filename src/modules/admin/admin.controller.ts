@@ -6,21 +6,24 @@ import {
   Param,
   UseGuards,
   Delete,
+  Put,
 } from '@nestjs/common';
-import { BaseController, AuthRolesGuard } from 'src/core';
-import { AdminCreateDto, AdminResetPasswordDto } from './dto';
+import { BaseController, AuthRolesGuard } from '../../core';
+import { AdminCreateDto, AdminResetPasswordDto, AdminUpdateDto } from './dto';
 import { AdminService } from './admin.service';
-import { UserInfo, ADMIN_ROLE, CONST_ADMIN_ROLE } from 'src/common';
+import { UserInfo, ADMIN_ROLE, CONST_ADMIN_ROLE } from '../../common';
 import { Admin } from './admin.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import Debug from 'debug';
+import { basename } from 'path';
+
+const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 
 @Controller()
-@ApiBearerAuth()
 @ApiTags('Admin', 'ADMIN')
-export class AdminController extends BaseController {
-  constructor(private readonly adminService: AdminService) {
-    super();
-  }
+@ApiBearerAuth()
+export class AdminController {
+  constructor(private readonly adminService: AdminService) {}
 
   /**
    * 관리자 생성
@@ -28,6 +31,7 @@ export class AdminController extends BaseController {
    */
   @Post('/admin')
   async create(@Body() adminCreateDto: AdminCreateDto) {
+    debug();
     return await this.adminService.create(adminCreateDto);
   }
 
@@ -38,6 +42,8 @@ export class AdminController extends BaseController {
   @Get('/admin/my-page')
   @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
   async findMe(@UserInfo() admin: Admin): Promise<Admin> {
+    debug();
+    console.log(admin);
     return await this.adminService.findOne(admin.id);
   }
 
@@ -46,8 +52,9 @@ export class AdminController extends BaseController {
    * @param adminId
    */
   @Get('/admin/:id([0-9]+)')
-  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
-  async findOne(@Param(':id') adminId: number): Promise<Admin> {
+  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
+  async findOne(@Param('id') adminId: number): Promise<Admin> {
+    debug();
     return await this.adminService.findOne(adminId);
   }
 
@@ -57,7 +64,7 @@ export class AdminController extends BaseController {
    * @param adminResetPasswordDto
    */
   @Post('/admin/reset-password')
-  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
+  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
   async resetPassword(
     @UserInfo() admin: Admin,
     @Body() adminResetPasswordDto: AdminResetPasswordDto,
@@ -71,12 +78,27 @@ export class AdminController extends BaseController {
   }
 
   /**
+   * 본인 계정 업데이트
+   * @param adminId
+   * @param adminUpdateDto
+   */
+  @Put('/admin')
+  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
+  async update(
+    @UserInfo() adminId: number,
+    @Body() adminUpdateDto: AdminUpdateDto,
+  ): Promise<Admin> {
+    debug();
+    return await this.adminService.update(adminId, adminUpdateDto);
+  }
+
+  /**
    * 특정한 관리자 삭제
    * @param adminId
    */
   @Delete('/admin/:id([0-9]+)')
   @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
-  async deleteOne(@Param(':id') adminId: number) {
+  async deleteOne(@Param('id') adminId: number) {
     return { isDeleted: await this.adminService.delete(adminId) };
   }
 
@@ -85,7 +107,7 @@ export class AdminController extends BaseController {
    * @param admin
    */
   @Delete('/admin/me')
-  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
+  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
   async delete(@UserInfo() admin: Admin) {
     return { isDeleted: await this.adminService.delete(admin.id) };
   }

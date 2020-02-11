@@ -60,7 +60,7 @@ export class AuthService extends BaseService {
       signinHistory.userId = user.id;
       await entityManager.save(signinHistory);
     });
-    return this.sign(user);
+    return await this.sign(user);
   }
 
   /**
@@ -82,7 +82,8 @@ export class AuthService extends BaseService {
       admin.signinCount = newCount;
       await entityManager.save(admin);
     });
-    return this.sign(admin);
+    console.log(await this.sign(admin));
+    return await this.sign(admin);
   }
 
   /**
@@ -118,6 +119,9 @@ export class AuthService extends BaseService {
       lastName: user.lastName,
       userRoles: user.userRoles,
     };
-    return this.jwtService.sign({ ...userSigninInfo, ...extend }, options);
+    return await this.jwtService.sign(
+      { ...userSigninInfo, ...extend },
+      options,
+    );
   }
 }

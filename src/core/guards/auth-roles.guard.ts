@@ -34,15 +34,15 @@ export class AuthRolesGuard extends AuthGuard('jwt') {
   handleRequest(err, user, info) {
     if (err || !user) {
       debug(info);
-      throw err || new UnauthorizedException();
+      console.log(info);
+      throw err || new UnauthorizedException('something wrong');
     }
 
     if (this.roles.length) {
-      debug(this.roles);
       const hasRole = () =>
         this.roles.some(role => user.userRoles.includes(role));
       if (!user.userRoles || !hasRole()) {
-        throw new ForbiddenException();
+        throw new ForbiddenException('something wrong');
       }
     }
     return user;

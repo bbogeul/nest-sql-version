@@ -23,7 +23,7 @@ export class AdminService {
       adminCreateDto.password,
     );
     const newAdmin = new Admin(adminCreateDto);
-    newAdmin.adminRoles = [ADMIN_ROLE.ADMIN_SUPER];
+    newAdmin.userRoles = [ADMIN_ROLE.ADMIN_SUPER];
     return await this.adminRepo.save(newAdmin);
   }
 

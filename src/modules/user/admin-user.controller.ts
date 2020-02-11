@@ -7,7 +7,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { BaseController, AuthRolesGuard } from '../../core';
-import { UserInfo, CONST_ADMIN_ROLE } from '../../common';
+import { UserInfo, CONST_ADMIN_ROLE, ADMIN_ROLE } from '../../common';
 import { PaginatedRequest, PaginatedResponse } from '../../common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminUserListDto } from './dto';
@@ -19,7 +19,7 @@ import { UserSigninHistory } from './user-signin-history.entity';
 @ApiTags('User', 'ADMIN')
 @ApiBearerAuth()
 // for testing
-// @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
+@UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
 export class AdminUserController extends BaseController {
   constructor(private readonly userService: UserService) {
     super();
@@ -65,7 +65,7 @@ export class AdminUserController extends BaseController {
    * @param userId
    */
   @Delete('/admin/user/:id([0-9]+)')
-  async deleteOne(@Param() userId: number): Promise<User> {
+  async deleteOne(@Param('id') userId: number): Promise<User> {
     return await this.userService.delete(userId);
   }
 }
