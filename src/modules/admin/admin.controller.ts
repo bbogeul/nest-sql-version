@@ -52,7 +52,7 @@ export class AdminController {
    * @param adminId
    */
   @Get('/admin/:id([0-9]+)')
-  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
+  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
   async findOne(@Param('id') adminId: number): Promise<Admin> {
     debug();
     return await this.adminService.findOne(adminId);
@@ -64,7 +64,7 @@ export class AdminController {
    * @param adminResetPasswordDto
    */
   @Post('/admin/reset-password')
-  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
+  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
   async resetPassword(
     @UserInfo() admin: Admin,
     @Body() adminResetPasswordDto: AdminResetPasswordDto,
@@ -83,7 +83,7 @@ export class AdminController {
    * @param adminUpdateDto
    */
   @Put('/admin')
-  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
+  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
   async update(
     @UserInfo() adminId: number,
     @Body() adminUpdateDto: AdminUpdateDto,
@@ -107,7 +107,7 @@ export class AdminController {
    * @param admin
    */
   @Delete('/admin/me')
-  @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
+  @UseGuards(new AuthRolesGuard(...CONST_ADMIN_ROLE))
   async delete(@UserInfo() admin: Admin) {
     return { isDeleted: await this.adminService.delete(admin.id) };
   }
