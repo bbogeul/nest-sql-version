@@ -26,15 +26,13 @@ export enum APPROVED_STATUS {
 }
 export const CONST_APPROVED_STATUS = Object.values(APPROVED_STATUS);
 
-export enum B2LINK_DEPT {
-  'B2LABS' = 'B2LABS',
-  'CBT' = 'CBT',
-  'GS' = 'GS',
-  'OTHERS' = 'OTHERS',
-  'UO' = 'UO',
-  'USP' = 'USP',
+export enum PRIVACY_POLICY_CATEGORY {
+  'HEADER' = 'HEADER',
+  'CONTENT' = 'CONTENT',
 }
-export const CONST_B2LINK_DEPT = Object.values(B2LINK_DEPT);
+export const CONST_PRIVACY_POLICY_CATEGORY = Object.values(
+  PRIVACY_POLICY_CATEGORY,
+);
 
 export enum BADGE_TYPE {
   'BEST' = 'BEST',
