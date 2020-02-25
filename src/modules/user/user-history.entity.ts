@@ -2,7 +2,7 @@ import { BaseEntity } from '../../core';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { STUDENT_ROLE } from 'src/shared';
 
-@Entity('user_update_history')
+@Entity('student_update_history')
 export class UserHistory extends BaseEntity<UserHistory> {
   constructor(partial?: any) {
     super(partial);
