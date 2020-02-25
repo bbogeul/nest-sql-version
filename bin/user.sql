@@ -1,6 +1,6 @@
-CREATE TABLE `student` (
+CREATE TABLE `user` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `student_roles` json DEFAULT NULL,
+  `user_roles` json DEFAULT NULL,
   `email` varchar(512) NOT NULL,
   `password` varchar(512) NOT NULL,
   `password_updated` timestamp NULL DEFAULT NULL,

@@ -1,7 +1,7 @@
 import { BaseEntity } from '../../core';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('student_signin_history')
+@Entity('user_signin_history')
 export class UserSigninHistory extends BaseEntity<UserSigninHistory> {
   @PrimaryGeneratedColumn({
     type: 'int',
