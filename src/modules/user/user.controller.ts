@@ -9,7 +9,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { User } from './user.entity';
-import { UserInfo, USER_ROLE } from '../../common';
+import { UserInfo, STUDENT_ROLE } from '../../common';
 import { BaseController } from '../../core';
 import { UserService } from './user.service';
 import { UserCreateDto, UserUpdateDto, UserResetPasswordDto } from './dto';
@@ -17,7 +17,7 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthRolesGuard } from '../../core';
 
 @Controller()
-@ApiTags('User', 'USER')
+@ApiTags('Student', 'STUDENT')
 @ApiBearerAuth()
 export class UserController extends BaseController {
   constructor(private readonly userService: UserService) {
@@ -28,7 +28,7 @@ export class UserController extends BaseController {
    * create user
    * @param userCreateDto
    */
-  @Post('/user')
+  @Post('/student')
   async create(@Body() userCreateDto: UserCreateDto): Promise<User> {
     return await this.userService.create(userCreateDto);
   }
@@ -38,7 +38,7 @@ export class UserController extends BaseController {
    * @param user
    */
   @Get('/my-page')
-  @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
+  @UseGuards(new AuthRolesGuard(STUDENT_ROLE.STUDENT_ROLE_APPROVED))
   async findMe(@UserInfo() user: User): Promise<User> {
     return await this.userService.findOne(user.id);
   }
@@ -48,8 +48,8 @@ export class UserController extends BaseController {
    * @param user
    * @param userUpdateDto
    */
-  @Put('/user')
-  @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
+  @Put('/student')
+  @UseGuards(new AuthRolesGuard(STUDENT_ROLE.STUDENT_ROLE_APPROVED))
   async update(
     @UserInfo() user: User,
     @Body() userUpdateDto: UserUpdateDto,
@@ -61,8 +61,8 @@ export class UserController extends BaseController {
    * 회원 탈퇴
    * @param user
    */
-  @Delete('/user')
-  @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
+  @Delete('/student')
+  @UseGuards(new AuthRolesGuard(STUDENT_ROLE.STUDENT_ROLE_APPROVED))
   async delete(@UserInfo() user: User): Promise<User> {
     return await this.userService.delete(user.id);
   }
@@ -72,8 +72,8 @@ export class UserController extends BaseController {
    * @param user
    * @param userResetPasswordDto
    */
-  @Post('/user/reset-password')
-  @UseGuards(new AuthRolesGuard(USER_ROLE.USER_APPROVED))
+  @Post('/student/reset-password')
+  @UseGuards(new AuthRolesGuard(STUDENT_ROLE.STUDENT_ROLE_APPROVED))
   async resetPassword(
     @UserInfo() user: User,
     @Body() userResetPasswordDto: UserResetPasswordDto,

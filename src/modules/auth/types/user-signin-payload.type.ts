@@ -1,12 +1,12 @@
 import { UserType } from './role.type';
-import { ADMIN_ROLE, USER_ROLE } from '../../../shared';
+import { ADMIN_ROLE, STUDENT_ROLE } from '../../../shared';
 
 export interface UserSigninPayload {
   userType: UserType;
   userId: number;
   firstName: string;
   lastName: string;
-  userRoles: (ADMIN_ROLE | USER_ROLE)[];
+  userRoles: (ADMIN_ROLE | STUDENT_ROLE)[];
 }
 
 export interface UserTempSigninPayload {

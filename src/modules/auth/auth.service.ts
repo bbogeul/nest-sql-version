@@ -11,7 +11,7 @@ import { PasswordService } from './password.service';
 import { UserSigninPayload } from './types/user-signin-payload.type';
 import { BaseService } from '../../core';
 import { UserType } from './types/role.type';
-import { ADMIN_STATUS, USER_STATUS, USER_ROLE } from '../../shared';
+import { ADMIN_STATUS, STUDENT_ROLE_STATUS, STUDENT_ROLE } from '../../shared';
 import { SigninDto } from './dto';
 import { UserSigninHistory } from '../user/user-signin-history.entity';
 import { Admin } from '../admin/admin.entity';
@@ -39,7 +39,7 @@ export class AuthService extends BaseService {
     if (!user) {
       throw new BadRequestException('User not found!');
     }
-    if (user.userRoles === [USER_ROLE.USER_NOT_APPROVED]) {
+    if (user.userRoles === [STUDENT_ROLE.STUDENT_ROLE_NOT_APPROVED]) {
       throw new BadRequestException('User is not approved to use this site');
     }
     const passwordValid = await this.passwordService.validatePassword(

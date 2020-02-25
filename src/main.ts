@@ -16,12 +16,17 @@ import { ClassTransformOptions } from '@nestjs/common/interfaces/external/class-
 const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
 const env = process.env.NODE_ENV;
 
+// run without sourcing a bash_profile
+if (!env) {
+  env === 'development';
+}
+
 let app: NestExpressApplication;
 declare const module: any;
 
 async function bootstrap() {
   if (env === 'development') {
-    console.log('Running in development mode.');
+    console.log('Running in development mode. 개발 모드로 진행중');
     console.log(process.env.MYSQL_PORT);
   }
   app = await NestFactory.create<NestExpressApplication>(AppModule, {

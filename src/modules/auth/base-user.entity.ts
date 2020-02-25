@@ -1,6 +1,6 @@
 import { Expose, Exclude } from 'class-transformer';
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
-import { ADMIN_ROLE, USER_ROLE } from '../../common';
+import { ADMIN_ROLE, STUDENT_ROLE } from '../../common';
 import { UserType } from './types/role.type';
 import { BaseEntity } from '../../core';
 
@@ -50,7 +50,7 @@ export abstract class BaseUser extends BaseEntity<BaseUser> {
   lastName: string;
 
   // 필드 정의 및 데이터베이스 컬럼 정의는 Admin, Buyer 모델에서 정의한다.
-  userRoles: (ADMIN_ROLE | USER_ROLE)[];
+  userRoles: (ADMIN_ROLE | STUDENT_ROLE)[];
 
   @Column('int', {
     name: 'signin_count',

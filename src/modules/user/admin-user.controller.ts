@@ -7,7 +7,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { BaseController, AuthRolesGuard } from '../../core';
-import { UserInfo, CONST_ADMIN_ROLE, ADMIN_ROLE } from '../../common';
+import { ADMIN_ROLE } from '../../common';
 import { PaginatedRequest, PaginatedResponse } from '../../common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminUserListDto } from './dto';
@@ -16,7 +16,7 @@ import { User } from './user.entity';
 import { UserSigninHistory } from './user-signin-history.entity';
 
 @Controller()
-@ApiTags('User', 'ADMIN')
+@ApiTags('Student', 'ADMIN')
 @ApiBearerAuth()
 // for testing
 @UseGuards(new AuthRolesGuard(ADMIN_ROLE.ADMIN_SUPER))
@@ -30,7 +30,7 @@ export class AdminUserController extends BaseController {
    * @param adminUserListDto
    * @param pagination
    */
-  @Get('/admin/user')
+  @Get('/admin/student')
   async findAll(
     @Query() adminUserListDto: AdminUserListDto,
     @Query() pagination: PaginatedRequest,
@@ -42,7 +42,7 @@ export class AdminUserController extends BaseController {
    * find one user
    * @param userId
    */
-  @Get('/admin/user/:id([0-9]+)')
+  @Get('/admin/student/:id([0-9]+)')
   async findOne(@Param('id') userId: number): Promise<User> {
     return await this.userService.findOne(userId);
   }
@@ -52,7 +52,7 @@ export class AdminUserController extends BaseController {
    * @param userId
    * @param pagination
    */
-  @Get('/admin/user/:id([0-9]+)/signin-history')
+  @Get('/admin/student/:id([0-9]+)/signin-history')
   async findSigninHistory(
     @Param('id') userId: number,
     @Query() pagination: PaginatedRequest,
@@ -64,7 +64,7 @@ export class AdminUserController extends BaseController {
    * 관리자가 회원 강제 삭제
    * @param userId
    */
-  @Delete('/admin/user/:id([0-9]+)')
+  @Delete('/admin/student/:id([0-9]+)')
   async deleteOne(@Param('id') userId: number): Promise<User> {
     return await this.userService.delete(userId);
   }

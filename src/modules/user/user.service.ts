@@ -12,7 +12,7 @@ import {
   UserUpdateDto,
   UserResetPasswordDto,
 } from './dto';
-import { PaginatedRequest, PaginatedResponse, USER_ROLE } from 'src/common';
+import { PaginatedRequest, PaginatedResponse, STUDENT_ROLE } from 'src/common';
 import { PasswordService } from '../auth/password.service';
 import { UserHistory } from './user-history.entity';
 import { UserSigninHistory } from './user-signin-history.entity';
@@ -90,7 +90,7 @@ export class UserService extends BaseService {
       user.password = await this.passwordService.hashPassword(
         userCreateDto.password,
       );
-      user.userRoles = [USER_ROLE.USER_APPROVED];
+      user.userRoles = [STUDENT_ROLE.STUDENT_ROLE_APPROVED];
       user = await entityManager.save(user);
       let userHistory = new UserHistory(user);
       userHistory.userId = user.id;

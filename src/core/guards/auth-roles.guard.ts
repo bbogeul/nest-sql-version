@@ -7,7 +7,7 @@ import {
 // import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { basename } from 'path';
-import { ADMIN_ROLE, USER_ROLE } from '../../common';
+import { ADMIN_ROLE, STUDENT_ROLE } from '../../common';
 // import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 
 const debug = Debug(`app:${basename(__dirname)}:${basename(__filename)}`);
@@ -17,9 +17,9 @@ export class AuthRolesGuard extends AuthGuard('jwt') {
   // constructor(private readonly reflector: Reflector) {
   //   super();
   // }
-  readonly roles: (ADMIN_ROLE | USER_ROLE)[];
+  readonly roles: (ADMIN_ROLE | STUDENT_ROLE)[];
 
-  constructor(...roles: (ADMIN_ROLE | USER_ROLE)[]) {
+  constructor(...roles: (ADMIN_ROLE | STUDENT_ROLE)[]) {
     super();
     this.roles = roles;
   }

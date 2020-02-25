@@ -5,7 +5,7 @@ import { SigninDto } from './dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller()
-@ApiTags('Auth', 'USER')
+@ApiTags('Auth', 'STUDENT')
 @ApiBearerAuth()
 export class UserAuthController extends BaseController {
   constructor(private readonly authService: AuthService) {
